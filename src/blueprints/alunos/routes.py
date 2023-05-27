@@ -1,4 +1,4 @@
-import random
+import os, struct
 
 from flask import render_template, jsonify, request
 from sqlalchemy.exc import *
@@ -25,7 +25,7 @@ def get_aluno(obj, uuid):
 @create(Aluno, request)
 def create_aluno(obj):
     try:
-        obj.ra = random.randrange(100000, 999999, 1)
+        obj.ra = struct.unpack('I', os.urandom(4))[0]
         db.session.add(obj)
         db.session.commit()
         obj = get_aluno_schema.dump(obj)
